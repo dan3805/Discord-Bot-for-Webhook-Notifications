@@ -1,0 +1,32 @@
+version: '3'
+services:
+ services:
+  bot:
+    build:
+      context: .
+      args:
+        GITHUB_REPO_URL: ${GITHUB_REPO_URL} # URL of the GitHub repository that contains the bot code
+    container_name: bot
+    restart: unless-stopped
+    environment:
+      # Discord bot token, which can be found in the Discord developer portal
+      # under the "Bot" section of the application settings.
+      # Make sure to keep this value secret.
+      TOKEN: ${DISCORD_BOT_TOKEN}
+      
+      # Persistent message footer, which is used to identify the message created
+      # by the bot when it starts up. This value can be changed to whatever you
+      # want.
+      MESSAGE: "Default persistent message"
+      
+      # Secret value used for security purposes, which should match the value used
+      # in the notification-endpoint route in the bot.js file.
+      SECRET: ${BOT_SECRET}
+      
+      # ID of the channel where the persistent message should be sent. This value
+      # can be found by right-clicking on the channel in the Discord app and selecting
+      # "Copy ID".
+      CHANNEL_ID: ${PERSISTENT_MESSAGE_CHANNEL_ID}
+
+      ports:
+      - "3000:3000"
