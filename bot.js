@@ -3,11 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 // Set the message for the persistent message footer
-const MESSAGE = 'Custom persistent message';
+const MESSAGE = process.env.MESSAGE || 'Default persistent message';
 
 const client = new Discord.Client();
 const app = express();
 const persistentMessageChannelID = 'CHANNEL_ID';
+const TOKEN = process.env.TOKEN || 'DISCORD_BOT_TOKEN_HERE';
 let persistentMessage = null;
 
 app.use(bodyParser.json());
@@ -92,6 +93,6 @@ app.post('/notification-endpoint', (req, res) => {
   res.status(200).end();
 });
 
-client.login('DISCORD_BOT_TOKEN)');
+client.login(TOKEN);
 
 app.listen(3000);
