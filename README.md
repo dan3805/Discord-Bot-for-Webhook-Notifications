@@ -21,16 +21,18 @@ Here's an example of a JSON payload for a POST request that updates the title an
     "description": "New Description"
   }
 }
-``
+```
 Similarly, you can send POST requests to update specific fields of the message using the update_field field, or delete specific fields using the delete_field field. Here are a few more examples:
 
 ## Update the color of the message
-```{
+```
+{
   "update_embed": {
     "color": 16711680
   }
 }
 ```
+
 ## Update a specific field in the message
 ```
 {
