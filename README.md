@@ -43,8 +43,13 @@ Similarly, you can send POST requests to update specific fields of the message u
 }
 ```
 ## Delete a specific field from the message
+```
 {
   "delete_field": "Field 3"
 }
+```
 Please note that this is just an example implementation of a Discord bot for webhook notifications, and you may need to modify it to fit your specific needs.
 
+## Acknowledgements
+
+This code was written with the assistance of ChatGPT, an AI language model developed by OpenAI. While the code has been thoroughly tested, it may not be perfect, and any feedback or suggestions for improvement are welcome.
