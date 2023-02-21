@@ -1,12 +1,12 @@
 FROM node:14-alpine
 
+ARG GITHUB_REPO_URL
+
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
-
-RUN npm install discord.js express
-
-COPY . .
+RUN apk add --no-cache git && \
+    git clone $GITHUB_REPO_URL . && \
+    npm install && \
+    npm install discord.js express
 
 CMD ["node", "bot.js"]
