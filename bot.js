@@ -44,7 +44,16 @@ client.on('ready', async () => {
 });
 
 // Receive notifications from the Overseerr API
-app.post('/notification-endpoint', (req, res) => {
+app.post('/notification-endpoint/:secret', (req, res) => {
+  const secret = req.params.secret;
+  
+  // Check if the secret parameter matches the expected value
+  if (secret !== process.env.SECRET) {
+    console.log(`Invalid secret parameter: ${secret}`);
+    res.status(401).end();
+    return;
+  }
+  
   const notification = req.body;
   console.log(`New notification received: ${JSON.stringify(notification)}`);
 
