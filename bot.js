@@ -7,7 +7,7 @@ const MESSAGE = process.env.MESSAGE || 'Default persistent message';
 
 const client = new Discord.Client();
 const app = express();
-const persistentMessageChannelID = 'CHANNEL_ID';
+const persistentMessageChannelID = process.env.CHANNEL_ID || 'Channel_ID_HERE';
 const TOKEN = process.env.TOKEN || 'DISCORD_BOT_TOKEN_HERE';
 let persistentMessage = null;
 
