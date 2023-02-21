@@ -5,7 +5,10 @@ services:
     build:
       context: .
       args:
-        GITHUB_REPO_URL: ${GITHUB_REPO_URL} # URL of the GitHub repository that contains the bot code
+        GITHUB_REPO_URL: "https://github.com/dan3805/Discord-Bot-for-Webhook-Notifications.git"
+                                            # To find the URL for the GitHub repository that contains your bot code,
+                                            # go to your repository page on GitHub, click on the "Code" button,
+                                            # select HTTPS, and copy the URL to paste into the Dockerfile for cloning and building the image
     container_name: bot
     restart: unless-stopped
     environment:
