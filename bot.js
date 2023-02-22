@@ -90,7 +90,7 @@ app.post('/notification-endpoint', (req, res) => {
 
   res.status(200).end();
 });
-
-client.login('TOKEN');
+console.log('TOKEN : ' + TOKEN);
+client.login(TOKEN);
 
 app.listen(3000);
