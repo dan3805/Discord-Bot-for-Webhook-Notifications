@@ -133,6 +133,7 @@ client.login(TOKEN)
     console.error(`Error logging in the Discord bot: ${error}`);
     process.exit(1);
   });
+});
 
 // Start the Express server
 app.listen(process.env.PORT || 3000, () => {
