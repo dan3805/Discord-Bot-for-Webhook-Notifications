@@ -183,6 +183,56 @@ Here's an example of a JSON payload for a POST request that updates the title an
   }
 }
 ```
+## here's an example of a more complex JSON message that could be used to create, edit, and delete fields in an embed:
+### This message will create a new embed in the specified channel, with three fields. It will then update the values of the first two fields and delete the third field. Finally, it will add a new fourth field to the embed. The action field specifies that this is an edit operation, and the fieldsToUpdate, fieldsToDelete, and newFields fields specify the changes to be made to the embed.
+```
+{
+  "channelId": "123456789012345678",
+  "message": {
+    "title": "My Embed",
+    "color": "#008000",
+    "description": "This is my test embed.",
+    "fields": [
+      {
+        "name": "Field 1",
+        "value": "This is the first field.",
+        "inline": true
+      },
+      {
+        "name": "Field 2",
+        "value": "This is the second field.",
+        "inline": true
+      },
+      {
+        "name": "Field 3",
+        "value": "This is the third field.",
+        "inline": false
+      }
+    ],
+    "action": "edit",
+    "fieldsToUpdate": [
+      {
+        "name": "Field 1",
+        "value": "This is the updated value of Field 1."
+      },
+      {
+        "name": "Field 2",
+        "value": "This is the updated value of Field 2."
+      }
+    ],
+    "fieldsToDelete": [
+      "Field 3"
+    ],
+    "newFields": [
+      {
+        "name": "Field 4",
+        "value": "This is the new fourth field.",
+        "inline": false
+      }
+    ]
+  }
+}
+```
 
 Please note that this is just an example implementation of a Discord bot for webhook notifications, and you may need to modify it to fit your specific needs.
 
