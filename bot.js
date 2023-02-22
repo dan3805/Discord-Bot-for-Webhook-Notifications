@@ -85,7 +85,7 @@ app.post('/notification-endpoint', (req, res) => {
   }
 
   persistentMessage.edit({
-    embed: embed
+    embed: [embed]
   });
 
   res.status(200).end();
