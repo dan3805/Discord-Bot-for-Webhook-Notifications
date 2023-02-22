@@ -27,7 +27,8 @@ persistentMessage = messages.find(m => m.author.id === client.user.id && m.embed
 
 // If a persistent message has already been sent, retrieve its ID
 if (persistentMessage) {
-console.log(ID of existing persistent message: ${persistentMessage.id});
+console.log(`ID of existing persistent message: ${persistentMessage.id}`);
+
 }
 // Otherwise, send a new persistent message and retrieve its ID
 else {
