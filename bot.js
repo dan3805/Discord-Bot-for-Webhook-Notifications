@@ -24,8 +24,7 @@ client.on('ready', async () => {
   // If a persistent message has already been sent, we retrieve its ID
   if (persistentMessage) {
     console.log(`ID of the persistent message retrieved: ${persistentMessage.id}`);
-  }
-  else {
+  } else {
     persistentMessage = await channel.send({
       embeds: [{
         title: 'Persistent message',
@@ -44,6 +43,12 @@ client.on('ready', async () => {
 app.post('/notification-endpoint', (req, res) => {
   const notification = req.body;
   console.log(`New notification received: ${JSON.stringify(notification)}`);
+
+  // If the persistent message has not been found, return a 404 error
+  if (!persistentMessage) {
+    console.log('Persistent message not found');
+    return res.status(404).end();
+  }
 
   const embed = persistentMessage.embeds.length > 0 ? { ...persistentMessage.embeds[0] } : {};
 
@@ -84,16 +89,21 @@ app.post('/notification-endpoint', (req, res) => {
       }
     }
 
-    if (!embed || !embed.title) {
-      console.log('Invalid embed structure');
-      return res.status(400).end();
-    }
-
-    persistentMessage.edit({
-      embeds: [embed]
-    });
+ if (!embed || !embed.title) {
+    console.log('Invalid embed structure');
+    return res.status(400).end();
   }
-  res.status(200).end();
+
+  persistentMessage.edit({
+    embeds: [embed]
+  })
+    .then(() => {
+      res.status(200).end();
+    })
+    .catch(error => {
+      console.error('Error editing message:', error);
+      res.status(500).end();
+    });
 });
 
 console.log('TOKEN : ' + TOKEN);
