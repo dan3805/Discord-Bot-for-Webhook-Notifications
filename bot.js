@@ -89,6 +89,7 @@ if (notification.delete_field) {
   }
 }
 
+}
 if (!embed || !embed.title) {
   console.log('Invalid embed structure');
   return res.status(400).end();
