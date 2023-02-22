@@ -37,7 +37,7 @@ client.on('ready', async () => {
         description: 'This is a persistent message that will be updated',
         color: 0x00ff00,
         footer: {
-          text: 'MESSAGE'
+          text: 'Default persistent message'
         }
       }
     });
@@ -88,6 +88,7 @@ app.post('/notification-endpoint/:secret', (req, res) => {
       field.value = value;
     }
   }
+
 
   // If the "delete_field" field is present, remove the specified field from the message embed
   if (notification.delete_field) {
