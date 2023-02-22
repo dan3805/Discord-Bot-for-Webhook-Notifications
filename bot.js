@@ -128,14 +128,13 @@ if (persistentMessage) {
 } else {
   console.error(`Error editing persistent message: persistentMessage is null`);
 }
-
 });
 
-// Start the Express server
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server listening on port ${process.env.PORT || 3000}`);
-});
-
-// Log in the Discord client
+// Log in to Discord with the bot token
 client.login(TOKEN);
-}
+
+// Start the express server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
