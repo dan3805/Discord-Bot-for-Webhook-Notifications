@@ -83,7 +83,10 @@ app.post('/notification-endpoint', (req, res) => {
       embed.fields.splice(index, 1);
     }
   }
-
+if (!embed || !embed.title) {
+  console.log('Invalid embed structure');
+  return res.status(400).end();
+}
   persistentMessage.edit({
     embed: [embed]
   });
