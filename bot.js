@@ -1,93 +1,81 @@
-const Discord = require('discord.js');
 const express = require('express');
-const bodyParser = require('body-parser');
+const Discord = require('discord.js');
 
-const client = new Discord.Client();
 const app = express();
-const persistentMessageChannelID = process.env.PERSISTENT_MESSAGE_CHANNEL_ID;
-let persistentMessage = null;
+const port = 3000;
+const token = process.env.DISCORD_BOT_TOKEN;
+const client = new Discord.Client();
 
-app.use(bodyParser.json());
-
-client.on('ready', async () => {
-  console.log(`Connected as ${client.user.tag}!`);
-
-  const channel = client.channels.cache.get(persistentMessageChannelID);
-
-  const messages = await channel.messages.fetch();
-  persistentMessage = messages.find(m => m.author.id === client.user.id && m.embeds[0].footer.text === 'Persistent message');
-
-  if (persistentMessage) {
-    console.log(`ID of existing persistent message: ${persistentMessage.id}`);
-  } else {
-    persistentMessage = await channel.send({
-      embeds: [{
-        title: 'Persistent message',
-        description: 'This is a persistent message that will be updated',
-        color: 0x00ff00,
-        footer: {
-          text: 'Default persistent message'
-        }
-      }]
-    });
-    console.log(`ID of new persistent message: ${persistentMessage.id}`);
-  }
+client.on('ready', () => {
+  console.log(`Connecté en tant que ${client.user.tag}!`);
 });
 
-app.post('/notification-endpoint/:secret', (req, res) => {
-  const secret = req.params.secret;
+app.use(express.json());
 
-  if (secret !== process.env.SECRET) {
-    console.log(`Invalid secret parameter: ${secret}`);
-    res.status(401).end();
-    return;
-  }
+app.post('/embed', (req, res) => {
+  const { channelId, message } = req.body;
 
-  const notification = req.body;
-  console.log(`New notification received: ${JSON.stringify(notification)}`);
+  const channel = client.channels.cache.get(channelId);
 
-  const embed = { ...persistentMessage.embeds[0] };
-  if (notification.update_embed) {
-    for (const [key, value] of Object.entries(notification.update_embed)) {
-      if (key in embed) {
-        embed[key] = value;
-      } else if (key === 'fields') {
-        value.forEach(newField => {
-          const oldField = embed.fields.find(field => field.name.includes(newField.name));
-          if (oldField) {
-            oldField.name = newField.name;
-            oldField.value = newField.value;
-          }
+  if (channel && channel.type === 'GUILD_TEXT') {
+    if (message.title) {
+      const embed = new Discord.MessageEmbed();
+      if (message.color) embed.setColor(message.color);
+      if (message.title) embed.setTitle(message.title);
+      if (message.url) embed.setURL(message.url);
+      if (message.author) embed.setAuthor(message.author.name, message.author.icon_url, message.author.url);
+      if (message.description) embed.setDescription(message.description);
+      if (message.thumbnail) embed.setThumbnail(message.thumbnail.url);
+      if (message.fields) {
+        message.fields.forEach(field => {
+          embed.addField(field.name, field.value, field.inline);
         });
       }
-    }
-  }
+      if (message.image) embed.setImage(message.image.url);
+      if (message.timestamp) embed.setTimestamp(message.timestamp);
+      if (message.footer) embed.setFooter(message.footer.text, message.footer.icon_url);
+      channel.send({ embeds: [embed] }).then(() => {
+        res.send('Embed créé avec succès');
+      }).catch(err => {
+        res.status(500).send('Erreur lors de la création de l\'embed');
+        console.error(err);
+      });
+    } else if (message.action) {
+      channel.messages.fetch().then(messages => {
+        const embeds = messages.filter(m => m.author.id === client.user.id && m.embeds.length > 0).map(m => m.embeds[0]);
+        const embed = embeds[0];
 
-  if (notification.update_field) {
-    const { name, value } = notification.update_field;
-    const field = embed.fields.find(field => field.name.includes(name));
-    if (field) {
-      field.name = name;
-      field.value = value;
-    }
-  }
-
-  if (notification.delete_field) {
-    const index = embed.fields.findIndex(field => field.name === notification.delete_field);
-    if (index !== -1) {
-      embed.fields.splice(index, 1);
-    }
-  }
-
-  persistentMessage.edit({
-    embeds: [embed]
+        if (embed) {
+          if (message.action === 'edit' && message.fields) {
+            message.fields.forEach(field => {
+              const fieldIndex = embed.fields.findIndex(f => f.name === field.name);
+              if (fieldIndex >= 0) {
+                embed.fields[fieldIndex].value = field.value;
+              }
+            });
+            embed.edit({ embeds: [embed] }).then(() => {
+              res.send('Embed édité avec succès');
+            }).catch(err => {
+              res.status(500).send('Erreur lors de l\'édition de l\'embed');
+              console.error(err);
+            });
+} else if (message.action === 'add' && message.fields) {
+  message.fields.forEach(field => {
+    embed.addField(field.name, field.value, field.inline);
   });
-
-  res.status(200).end();
+  embed.edit({ embeds: [embed] }).then(() => {
+    res.send('Champ ajouté avec succès');
+  }).catch(err => {
+    res.status(500).send('Erreur lors de l\'ajout du champ à l\'embed');
+    console.error(err);
+  });
+} else {
+  res.status(400).send('Action non prise en charge');
+}
 });
 
-client.login(process.env.DISCORD_BOT_TOKEN);
+client.login(token);
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Express server started on port ${process.env.PORT || 3000}`);
+app.listen(port, () => {
+  console.log(`Le serveur est en cours d'écoute sur le port ${port}!`);
 });
