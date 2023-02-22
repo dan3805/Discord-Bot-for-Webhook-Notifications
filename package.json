@@ -4,9 +4,9 @@
   "description": "A Discord bot",
   "main": "bot.js",
   "dependencies": {
-    "discord.js": "",
-    "express": "",
-    "body-parser": ""
+    "discord.js": "latest",
+    "express": "latest",
+    "body-parser": "latest"
   },
   "engines": {
   "node": "latest",
