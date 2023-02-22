@@ -25,17 +25,17 @@ client.on('ready', async () => {
   if (persistentMessage) {
     console.log(`ID of the persistent message retrieved: ${persistentMessage.id}`);
   }
-else {
-  persistentMessage = await channel.send({
-    embeds: [{
-      title: 'Persistent message',
-      description: 'This is a persistent message that will be updated',
-      color: 0x00ff00,
-      footer: {
-        text: 'Persistent message'
-      }
-    }]
-  });
+  else {
+    persistentMessage = await channel.send({
+      embeds: [{
+        title: 'Persistent message',
+        description: 'This is a persistent message that will be updated',
+        color: 0x00ff00,
+        footer: {
+          text: 'Persistent message'
+        }
+      }]
+    });
     console.log(`ID of the persistent message created: ${persistentMessage.id}`);
   }
 });
@@ -45,57 +45,61 @@ app.post('/notification-endpoint', (req, res) => {
   const notification = req.body;
   console.log(`New notification received: ${JSON.stringify(notification)}`);
 
- const embed = persistentMessage.embeds.length > 0 ? { ...persistentMessage.embeds[0] } : {};
+  const embed = persistentMessage.embeds.length > 0 ? { ...persistentMessage.embeds[0] } : {};
 
-if (embed.footer && embed.footer.text === 'Persistent message') {
-  // Update the embed message with the new values
-  if (notification.update_embed) {
-    for (const [key, value] of Object.entries(notification.update_embed)) {
-      if (key in embed) {
-        embed[key] = value;
-      } else if (key === 'fields') {
-        // Update a field based on its content
-        value.forEach(newField => {
-          const oldField = embed.fields.find(field => field.name.includes(newField.name));
-          if (oldField) {
-            oldField.name = newField.name;
-            oldField.value = newField.value;
-          }
-        });
+  if (embed.footer && embed.footer.text === 'Persistent message') {
+    // Update the embed message with the new values
+    if (notification.update_embed) {
+      for (const [key, value] of Object.entries(notification.update_embed)) {
+        if (key in embed) {
+          embed[key] = value;
+        } else if (key === 'fields') {
+          // Update a field based on its content
+          value.forEach(newField => {
+            const oldField = embed.fields.find(field => field.name.includes(newField.name));
+            if (oldField) {
+              oldField.name = newField.name;
+              oldField.value = newField.value;
+            }
+          });
+        }
       }
     }
-  }
 
-  // If the "update_field" field is present, we update the specified field in the embed message
-  if (notification.update_field) {
-    const { name, value } = notification.update_field;
-    const field = embed.fields.find(field => field.name.includes(name));
-    if (field) {
-      field.name = name;
-      field.value = value;
+    // If the "update_field" field is present, we update the specified field in the embed message
+    if (notification.update_field) {
+      const { name, value } = notification.update_field;
+      const field = embed.fields.find(field => field.name.includes(name));
+      if (field) {
+        field.name = name;
+        field.value = value;
+      }
     }
-  }
 
-  // If the "delete_field" field is present, we remove the specified field from the embed message
-  if (notification.delete_field) {
-    const index = embed.fields.findIndex(field => field.name === notification.delete_field);
-    if (index !== -1) {
-      embed.fields.splice(index, 1);
+    // If the "delete_field" field is present, we remove the specified field from the embed message
+    if (notification.delete_field) {
+      const index = embed.fields.findIndex(field => field.name === notification.delete_field);
+      if (index !== -1) {
+        embed.fields.splice(index, 1);
+      }
     }
-  }
 
-  if (!embed || !embed.title) {
-    console.log('Invalid embed structure');
-    return res.status(400).end();
-  }
+    if (!embed || !embed.title) {
+      console.log('Invalid embed structure');
+      return res.status(400).end();
+    }
 
-  persistentMessage.edit({
-    embeds: [embed]
-  });
-}
-res.status(200).end();
+    persistentMessage.edit({
+      embeds: [embed]
+    });
+  }
+  res.status(200).end();
 });
+
 console.log('TOKEN : ' + TOKEN);
+
 client.login(TOKEN);
 
-app.listen(3000);
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
