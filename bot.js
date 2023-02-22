@@ -1,5 +1,5 @@
 const { Client, Intents } = require('discord.js');
-client = new Discord.Client({intents: 32767})
+const client = new Client({ intents: [32767] });
 const express = require('express');
 const bodyParser = require('body-parser');
 
