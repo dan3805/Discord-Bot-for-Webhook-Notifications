@@ -87,7 +87,7 @@ if (!embed || !embed.title) {
   return res.status(400).end();
 }
   persistentMessage.edit({
-    embed: [embed]
+    embeds: [embed]
   });
 
   res.status(200).end();
