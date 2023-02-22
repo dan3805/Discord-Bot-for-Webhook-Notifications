@@ -114,7 +114,6 @@ if (notification.delete_field) {
   }
 }
 
-// Check if persistent message is not null
 if (persistentMessage) {
   persistentMessage.edit({
     embed: embed
