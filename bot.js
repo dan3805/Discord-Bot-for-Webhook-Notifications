@@ -104,7 +104,6 @@ app.post('/notification-endpoint', (req, res) => {
       console.error('Error editing message:', error);
       res.status(500).end();
     });
-});
 
 console.log('TOKEN : ' + TOKEN);
 
