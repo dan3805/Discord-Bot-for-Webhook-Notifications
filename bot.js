@@ -16,6 +16,8 @@ app.use(express.json());
 app.post('/embed', (req, res) => {
   const { channelId, message } = req.body;
 
+  console.log('Received message:', req.body);
+
   const channel = client.channels.cache.get(channelId);
 
   if (channel && channel.type === 'GUILD_TEXT') {
@@ -35,11 +37,15 @@ app.post('/embed', (req, res) => {
       if (message.image) embed.setImage(message.image.url);
       if (message.timestamp) embed.setTimestamp(message.timestamp);
       if (message.footer) embed.setFooter(message.footer.text, message.footer.icon_url);
+
+      console.log('Sending message:', embed);
+
       channel.send({ embeds: [embed] }).then(() => {
-        res.send('Embed créé avec succès');
+        console.log('Message sent:', embed);
+        res.send('Embed created successfully');
       }).catch(err => {
-        res.status(500).send('Erreur lors de la création de l\'embed');
-        console.error(err);
+        console.error('Error sending message:', err);
+        res.status(500).send('Error creating embed');
       });
     } else if (message.action) {
       channel.messages.fetch().then(messages => {
@@ -53,8 +59,8 @@ app.post('/embed', (req, res) => {
             embed.edit({ embeds: [embed] }).then(() => {
               res.send('Field edited successfully');
             }).catch(err => {
+              console.error('Error editing field:', err);
               res.status(500).send('Error editing field');
-              console.error('Error editing field', err);
             });
           } else if (message.action === 'edit' && message.fieldId && message.value) {
             const fieldId = message.fieldId;
@@ -62,24 +68,12 @@ app.post('/embed', (req, res) => {
             if (field) {
               field.value = message.value;
               embed.edit({ embeds: [embed] }).then(() => {
+                console.log('Field edited successfully:', embed);
                 res.send('Field edited successfully');
               }).catch(err => {
+                console.error('Error editing field:', err);
                 res.status(500).send('Error editing field');
-                console.error('Error editing field', err);
               });
-            } else {
-              res.status(404).send('Field not found');
-            }
-          } else if (message.action === 'add' && message.fields) {
-            message.fields.forEach(field => {
-              embed.addField(field.name, field.value, field.inline);
-            });
-            embed.edit({ embeds: [embed] }).then(() => {
-              res.send('Champ ajouté avec succès');
-            }).catch(err => {
-              res.status(500).send('Erreur lors de l\'ajout du champ à l\'embed');
-              console.error(err);
-            });
           } else {
             res.status(400).send('Action not supported or missing required fields');
           }
@@ -87,8 +81,8 @@ app.post('/embed', (req, res) => {
           res.status(404).send('Embed not found');
         }
       }).catch(err => {
+        console.error('Error retrieving messages:', err);
         res.status(500).send('Error retrieving messages');
-        console.error('Error retrieving messages', err);
       });
     } else {
       res.status(400).send('Action not supported or missing required fields');
