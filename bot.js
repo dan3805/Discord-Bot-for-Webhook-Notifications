@@ -25,18 +25,17 @@ client.on('ready', async () => {
   if (persistentMessage) {
     console.log(`ID of the persistent message retrieved: ${persistentMessage.id}`);
   }
-  // Otherwise, we send a new persistent message and retrieve its ID
-  else {
-    persistentMessage = await channel.send({
-      embed: {
-        title: 'Persistent message',
-        description: 'This is a persistent message that will be updated',
-        color: 0x00ff00,
-        footer: {
-          text: 'Persistent message'
-        }
+else {
+  persistentMessage = await channel.send({
+    embeds: [{
+      title: 'Persistent message',
+      description: 'This is a persistent message that will be updated',
+      color: 0x00ff00,
+      footer: {
+        text: 'Persistent message'
       }
-    });
+    }]
+  });
     console.log(`ID of the persistent message created: ${persistentMessage.id}`);
   }
 });
