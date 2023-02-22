@@ -1,12 +1,7 @@
-FROM node:latest
-
-ARG GITHUB_REPO_URL
-
-WORKDIR /start-script
+WORKDIR /app
 
 RUN apt-get update && apt-get install -y git
-RUN npm install discord.js express
-RUN curl -o start.sh $(echo $GITHUB_REPO_URL | sed 's/\.git//')/main/start.sh && chmod +x start.sh
 
-
-CMD ["/bin/sh", "/start-script/start.sh"]
+RUN git clone $GITHUB_REPO_URL . && \
+    npm install && \
+    npm install discord.js express
