@@ -3,7 +3,7 @@ FROM node:latest
 ARG GITHUB_REPO_URL
 
 # Create a directory for the app and set it as the working directory
-WORKDIR /start-script
+WORKDIR .
 
 # Install dependencies
 RUN apt-get update && apt-get install -y git
