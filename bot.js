@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const SECRET = process.env.SECRET || 'default_secret_value';
