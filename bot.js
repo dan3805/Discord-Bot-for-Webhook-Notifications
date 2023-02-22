@@ -16,7 +16,7 @@ let persistentMessage = null;
 app.use(bodyParser.json());
 
 client.on('ready', async () => {
-console.log(Connected as ${client.user.tag}!);
+console.log(`Connected as ${client.user.tag}!`);
 
 // Get the channel for the persistent message
 const channel = client.channels.cache.get(persistentMessageChannelID);
