@@ -1,9 +1,10 @@
 const express = require('express');
 const Discord = require('discord.js');
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [32767] });
 
 const app = express();
 const port = 3000;
-const client = new Discord.Client();
 const token = process.env.DISCORD_BOT_TOKEN;
 
 client.on('ready', () => {
