@@ -10,7 +10,7 @@ WORKDIR /start-script
 RUN apt-get update && apt-get install -y git
 
 # Download the start script from GitHub
-echo "GITHUB_REPO_URL: $GITHUB_REPO_URL"
+RUN echo "GITHUB_REPO_URL: $GITHUB_REPO_URL"
 RUN curl -o start.sh $GITHUB_REPO_URL/main/start.sh && \
     chmod +x start.sh
 
