@@ -92,9 +92,8 @@ if (embed.footer && embed.footer.text === 'Persistent message') {
   persistentMessage.edit({
     embeds: [embed]
   });
-
-
-  res.status(200).end();
+}
+res.status(200).end();
 });
 console.log('TOKEN : ' + TOKEN);
 client.login(TOKEN);
