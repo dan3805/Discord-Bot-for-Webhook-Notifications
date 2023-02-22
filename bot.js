@@ -81,30 +81,31 @@ app.post('/notification-endpoint', (req, res) => {
       }
     }
 
-    // If the "delete_field" field is present, we remove the specified field from the embed message
-    if (notification.delete_field) {
-      const index = embed.fields.findIndex(field => field.name === notification.delete_field);
-      if (index !== -1) {
-        embed.fields.splice(index, 1);
-      }
-    }
-
- if (!embed || !embed.title) {
-    console.log('Invalid embed structure');
-    return res.status(400).end();
+// If the "delete_field" field is present, we remove the specified field from the embed message
+if (notification.delete_field) {
+  const index = embed.fields.findIndex(field => field.name === notification.delete_field);
+  if (index !== -1) {
+    embed.fields.splice(index, 1);
   }
-
-  persistentMessage.edit({
-    embeds: [embed]
-  })
-    .then(() => {
-      res.status(200).end();
-    })
-    .catch(error => {
-      console.error('Error editing message:', error);
-      res.status(500).end();
-    });
 }
+
+if (!embed || !embed.title) {
+  console.log('Invalid embed structure');
+  return res.status(400).end();
+}
+
+persistentMessage.edit({
+  embeds: [embed]
+})
+  .then(() => {
+    res.status(200).end();
+  })
+  .catch(error => {
+    console.error('Error editing message:', error);
+    res.status(500).end();
+  });
+});
+
 console.log('TOKEN : ' + TOKEN);
 
 client.login(TOKEN);
