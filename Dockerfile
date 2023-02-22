@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:latest
 
 ARG GITHUB_REPO_URL
 
