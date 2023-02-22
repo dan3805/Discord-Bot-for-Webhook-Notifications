@@ -42,7 +42,8 @@ text: 'Default persistent message'
 }
 }
 });
-console.log(ID of new persistent message: ${persistentMessage.id});
+console.log(`ID of new persistent message: ${persistentMessage.id}`);
+
 }
 
 // Ensure that all required variables have been defined before attempting to use them
