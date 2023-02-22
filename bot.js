@@ -78,8 +78,7 @@ app.post('/notification-endpoint/:secret', (req, res) => {
       }
     }
   }
-
-  // If the "update_field" field is present, update the specified field in the message embed
+// If the "update_field" field is present, update the specified field in the message embed
   if (notification.update_field) {
     const { name, value } = notification.update_field;
     const field = embed.fields.find(field => field.name.includes(name));
@@ -110,7 +109,7 @@ app.post('/notification-endpoint/:secret', (req, res) => {
 
   res.status(200).end();
 });
-// app.js | line 45
+
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
@@ -132,6 +131,8 @@ if (!SECRET || SECRET === 'default_secret_value') {
 }
 
 client.login(TOKEN);
+
+// Ensure that all required variables have been defined before attempting to use them
 if (!MESSAGE) {
   console.error('Please define the MESSAGE environment variable');
   process.exit(1);
