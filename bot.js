@@ -89,7 +89,6 @@ app.post('/notification-endpoint/:secret', (req, res) => {
     }
   }
 
-
   // If the "delete_field" field is present, remove the specified field from the message embed
   if (notification.delete_field) {
     const index = embed.fields.findIndex(field => field.name === notification.delete_field);
@@ -98,27 +97,16 @@ app.post('/notification-endpoint/:secret', (req, res) => {
     }
   }
 
-  persistentMessage.edit({
-    embed: embed
-  });
+  // Check if persistent message is not null
+  if (persistentMessage) {
+    persistentMessage.edit({
+      embed: embed
+    }).catch(error => {
+      console.error(`Error editing persistent message: ${error}`);
+    });
+  } else {
+    console.error(`Error editing persistent message: persistentMessage is null`);
+  }
 
   res.status(200).end();
 });
-// Check if required environment variables are defined
-if (!TOKEN || TOKEN === 'DISCORD_BOT_TOKEN_HERE') {
-  console.error('Please define the DISCORD_BOT_TOKEN environment variable');
-  process.exit(1);
-}
-
-if (!persistentMessageChannelID || persistentMessageChannelID === 'Channel_ID_HERE') {
-  console.error('Please define the CHANNEL_ID environment variable');
-  process.exit(1);
-}
-
-if (!SECRET || SECRET === 'default_secret_value') {
-  console.error('Please define the SECRET environment variable');
-  process.exit(1);
-}
-client.login(TOKEN);
-
-app.listen(3000);
