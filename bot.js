@@ -70,14 +70,14 @@ app.post('/embed', (req, res) => {
               embed.edit({ embeds: [embed] }).then(() => {
                 console.log('Field edited successfully:', embed);
                 res.send('Field edited successfully');
-              }).catch(err => {
-                console.error('Error editing field:', err);
-                res.status(500).send('Error editing field');
+                 }).catch(err => {
+                console.error('Error adding field:', err);
+                res.status(500).send('Error adding field');
               });
           } else {
             res.status(400).send('Action not supported or missing required fields');
           }
-       } else {
+        } else {
           res.status(404).send('Embed not found');
         }
       }).catch(err => {
