@@ -1,15 +1,14 @@
 {
-  "name": "my-bot",
+  "name": "discord-bot",
   "version": "1.0.0",
-  "description": "A Discord bot",
+  "description": "Un bot Discord qui utilise Discord.js et Express.",
   "main": "bot.js",
   "dependencies": {
-     "discord.js": "^12.5.3",
-    "express": "^4.17.1",
-    "body-parser": ""
-  },
+    "discord.js": "^12.5.3",
+    "express": "^4.17.1"
+   },
   "engines": {
-  "node": "",
-  "npm": ""
+  "node": ">=16.0.0",
+  "npm": ">=7.0.0"
  }
 }
