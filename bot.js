@@ -25,25 +25,34 @@ client.on('ready', async () => {
   const messages = await channel.messages.fetch();
   persistentMessage = messages.find(m => m.author.id === client.user.id && m.embeds[0].footer.text === MESSAGE);
 
-  // If a persistent message has already been sent, retrieve its ID
-  if (persistentMessage) {
-    console.log(`ID of existing persistent message: ${persistentMessage.id}`);
-  }
-  // Otherwise, send a new persistent message and retrieve its ID
-  else {
-    persistentMessage = await channel.send({
-      embed: {
-        title: 'Persistent message',
-        description: 'This is a persistent message that will be updated',
-        color: 0x00ff00,
-        footer: {
-          text: 'Default persistent message'
-        }
+ // Check if persistent message is not null
+if (persistentMessage) {
+  // If persistent message exists, update it
+  persistentMessage.edit({
+    embed: embed
+  }).then(() => {
+    console.log('Persistent message updated successfully');
+  }).catch((error) => {
+    console.error(`Error updating persistent message: ${error}`);
+  });
+} else {
+  // If persistent message doesn't exist, create a new one
+  channel.send({
+    embed: {
+      title: 'Persistent message',
+      description: 'This is a persistent message that will be updated',
+      color: 0x00ff00,
+      footer: {
+        text: MESSAGE
       }
-    });
-    console.log(`ID of new persistent message: ${persistentMessage.id}`);
-  }
-});
+    }
+  }).then(newMessage => {
+    console.log(`ID of new persistent message: ${newMessage.id}`);
+    persistentMessage = newMessage;
+  }).catch(error => {
+    console.error(`Error creating persistent message: ${error}`);
+  });
+}
 
 // Receive notifications from the Overseerr API
 app.post('/notification-endpoint/:secret', (req, res) => {
