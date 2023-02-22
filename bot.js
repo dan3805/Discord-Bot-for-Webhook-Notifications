@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const persistentMessageChannelID = process.env.CHANNEL_ID || 'Channel_ID_HERE';
 const TOKEN = process.env.TOKEN || 'DISCORD_BOT_TOKEN_HERE';
+console.log(`Token: ${TOKEN}`);
 let persistentMessage = null;
 
 app.use(bodyParser.json());
