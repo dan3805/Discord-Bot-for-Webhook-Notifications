@@ -8,7 +8,6 @@ const SECRET = process.env.SECRET || 'default_secret_value';
 // Set the message for the persistent message footer
 const MESSAGE = process.env.MESSAGE || 'Default persistent message';
 
-const client = new Discord.Client();
 const app = express();
 const persistentMessageChannelID = process.env.CHANNEL_ID || 'Channel_ID_HERE';
 const TOKEN = process.env.TOKEN || 'DISCORD_BOT_TOKEN_HERE';
