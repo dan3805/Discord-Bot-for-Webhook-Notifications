@@ -56,40 +56,134 @@ my-custom-discord-bot
 \
 Here's an example of a JSON payload for a POST request that updates the title and description of the persistent message:
 
-```json
-{
-  "update_embed": {
-    "title": "New Title",
-    "description": "New Description"
-  }
-}
-```
-Similarly, you can send POST requests to update specific fields of the message using the update_field field, or delete specific fields using the delete_field field. Here are a few more examples:
 
-## Update the color of the message
-```
-{
-  "update_embed": {
-    "color": 16711680
+## Create a new embed:
+```{
+  "channelId": "1234567890",
+  "message": {
+    "title": "Welcome!",
+    "description": "Thanks for joining our server!",
+    "color": 6570404,
+    "thumbnail": {
+      "url": "https://i.imgur.com/uvDyOVz.png"
+    },
+    "fields": [
+      {
+        "name": "Field 1",
+        "value": "This is the first field",
+        "inline": true
+      },
+      {
+        "name": "Field 2",
+        "value": "This is the second field",
+        "inline": true
+      }
+    ],
+    "footer": {
+      "text": "Bot created by YourName",
+      "icon_url": "https://i.imgur.com/q5U6GBo.png"
+    }
   }
 }
 ```
 
-## Update a specific field in the message
+## Edit an existing field by index:
 ```
 {
-  "update_field": {
-    "name": "Field 2",
-    "value": "New Value for Field 2"
+  "channelId": "1234567890",
+  "message": {
+    "action": "edit",
+    "fieldIndex": 0,
+    "value": "New value for the first field"
+  }
+}
+
+```
+
+## Edit an existing field by ID:
+```
+{
+  "channelId": "1234567890",
+  "message": {
+    "action": "edit",
+    "fieldId": "1234567890",
+    "value": "New value for the field with ID 1234567890"
+  }
+}
+
+```
+## Add a new field:
+```
+{
+  "channelId": "1234567890",
+  "message": {
+    "action": "add",
+    "fields": [
+      {
+        "name": "Field 3",
+        "value": "This is the third field",
+        "inline": false
+      }
+    ]
   }
 }
 ```
-## Delete a specific field from the message
+## Set the embed color: 
+### To set the color of the embed, add a color field to the message object with a valid hexadecimal color code (without the # symbol). For example:
+{
+  "channelId": "123456789012345678",
+  "message": {
+    "title": "Example Embed",
+    "color": "00ff00",
+    "description": "This is an example embed with a green color"
+  }
+}
+## Add an image to the embed:
+### To add an image to the embed, add an image field to the message object with a url field containing the URL of the image. For example:
 ```
 {
-  "delete_field": "Field 3"
+  "channelId": "123456789012345678",
+  "message": {
+    "title": "Example Embed",
+    "image": {
+      "url": "https://example.com/image.png"
+    },
+    "description": "This is an example embed with an image"
+  }
 }
 ```
+## Set the author icon and URL: 
+### To set the icon and URL of the author field, add an author field to the message object with name, iconUrl, and url fields. For example:
+```
+{
+  "channelId": "123456789012345678",
+  "message": {
+    "title": "Example Embed",
+    "author": {
+      "name": "John Doe",
+      "iconUrl": "https://example.com/avatar.png",
+      "url": "https://example.com"
+    },
+    "description": "This is an example embed with an author"
+  }
+}
+```
+## Set the footer icon and text:
+### To set the icon and text of the footer field, add a footer field to the message object with text and iconUrl fields. For example:
+```
+{
+  "channelId": "123456789012345678",
+  "message": {
+    "title": "Example Embed",
+    "footer": {
+      "text": "© 2023 Example.com",
+      "iconUrl": "https://example.com/favicon.ico"
+    },
+    "description": "This is an example embed with a footer"
+  }
+}
+```
+
 Please note that this is just an example implementation of a Discord bot for webhook notifications, and you may need to modify it to fit your specific needs.
 
 ## Acknowledgements
