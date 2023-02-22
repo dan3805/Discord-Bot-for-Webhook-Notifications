@@ -2,12 +2,15 @@ FROM node:latest
 
 ARG GITHUB_REPO_URL
 
-WORKDIR /app
+# Create a directory for the app and set it as the working directory
+WORKDIR /start-script
 
+# Install dependencies
 RUN apt-get update && apt-get install -y git
 
-RUN git clone $GITHUB_REPO_URL . && \
-    npm install && \
-    npm install discord.js express
+# Download the start script from GitHub
+RUN curl -o start.sh $GITHUB_REPO_URL/main/start.sh && \
+    chmod +x start.sh
 
-CMD ["node", "bot.js"]
+# Set the start script as the default command
+CMD ["./start.sh"]
