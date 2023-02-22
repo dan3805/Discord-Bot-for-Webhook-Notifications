@@ -3,11 +3,11 @@ const Discord = require('discord.js');
 
 const app = express();
 const port = 3000;
-const token = process.env.DISCORD_BOT_TOKEN;
 const client = new Discord.Client();
+const token = process.env.DISCORD_BOT_TOKEN;
 
 client.on('ready', () => {
-  console.log(`Connecté en tant que ${client.user.tag}!`);
+  console.log(`Connected as ${client.user.tag}!`);
 });
 
 app.use(express.json());
@@ -46,36 +46,59 @@ app.post('/embed', (req, res) => {
         const embed = embeds[0];
 
         if (embed) {
-          if (message.action === 'edit' && message.fields) {
+          if (message.action === 'edit' && message.fieldIndex !== undefined && message.value) {
+            const fieldIndex = message.fieldIndex;
+            embed.fields[fieldIndex].value = message.value;
+            embed.edit({ embeds: [embed] }).then(() => {
+              res.send('Field edited successfully');
+            }).catch(err => {
+              res.status(500).send('Error editing field');
+              console.error('Error editing field', err);
+            });
+          } else if (message.action === 'edit' && message.fieldId && message.value) {
+            const fieldId = message.fieldId;
+            const field = embed.fields.find(f => f.id === fieldId);
+            if (field) {
+              field.value = message.value;
+              embed.edit({ embeds: [embed] }).then(() => {
+                res.send('Field edited successfully');
+              }).catch(err => {
+                res.status(500).send('Error editing field');
+                console.error('Error editing field', err);
+              });
+            } else {
+              res.status(404).send('Field not found');
+            }
+          } else if (message.action === 'add' && message.fields) {
             message.fields.forEach(field => {
-              const fieldIndex = embed.fields.findIndex(f => f.name === field.name);
-              if (fieldIndex >= 0) {
-                embed.fields[fieldIndex].value = field.value;
-              }
+              embed.addField(field.name, field.value, field.inline);
             });
             embed.edit({ embeds: [embed] }).then(() => {
-              res.send('Embed édité avec succès');
+              res.send('Champ ajouté avec succès');
             }).catch(err => {
-              res.status(500).send('Erreur lors de l\'édition de l\'embed');
+              res.status(500).send('Erreur lors de l\'ajout du champ à l\'embed');
               console.error(err);
             });
-} else if (message.action === 'add' && message.fields) {
-  message.fields.forEach(field => {
-    embed.addField(field.name, field.value, field.inline);
-  });
-  embed.edit({ embeds: [embed] }).then(() => {
-    res.send('Champ ajouté avec succès');
-  }).catch(err => {
-    res.status(500).send('Erreur lors de l\'ajout du champ à l\'embed');
-    console.error(err);
-  });
-} else {
-  res.status(400).send('Action non prise en charge');
-}
+          } else {
+            res.status(400).send('Action not supported or missing required fields');
+          }
+       } else {
+          res.status(404).send('Embed not found');
+        }
+      }).catch(err => {
+        res.status(500).send('Error retrieving messages');
+        console.error('Error retrieving messages', err);
+      });
+    } else {
+      res.status(400).send('Action not supported or missing required fields');
+    }
+  } else {
+    res.status(404).send('Channel not found or invalid type');
+  }
 });
 
 client.login(token);
 
 app.listen(port, () => {
-  console.log(`Le serveur est en cours d'écoute sur le port ${port}!`);
+  console.log(`Server listening on port ${port}!`);
 });
