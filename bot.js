@@ -37,7 +37,7 @@ client.on('ready', async () => {
         description: 'This is a persistent message that will be updated',
         color: 0x00ff00,
         footer: {
-          text: MESSAGE
+          text: 'MESSAGE'
         }
       }
     });
@@ -111,11 +111,6 @@ if (!TOKEN || TOKEN === 'DISCORD_BOT_TOKEN_HERE') {
 
 if (!persistentMessageChannelID || persistentMessageChannelID === 'Channel_ID_HERE') {
   console.error('Please define the CHANNEL_ID environment variable');
-  process.exit(1);
-}
-
-if (!MESSAGE || MESSAGE === 'Default persistent message') {
-  console.error('Please define the MESSAGE environment variable');
   process.exit(1);
 }
 
