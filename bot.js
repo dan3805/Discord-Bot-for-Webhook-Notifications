@@ -132,3 +132,20 @@ if (!SECRET || SECRET === 'default_secret_value') {
 }
 
 client.login(TOKEN);
+if (!MESSAGE) {
+  console.error('Please define the MESSAGE environment variable');
+  process.exit(1);
+}
+
+if (!persistentMessage) {
+  console.error('Persistent message not found');
+  process.exit(1);
+}
+
+persistentMessage.edit({
+  embed: embed
+}).then(() => {
+  console.log('Persistent message updated successfully');
+}).catch((error) => {
+  console.error(`Error updating persistent message: ${error}`);
+});
