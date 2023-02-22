@@ -1,8 +1,14 @@
-const Discord = require('discord.js');
+const { Client, Intents } = require('discord.js');
+const client = new Client({ 
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS
+  ]
+});
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const client = new Discord.Client();
 const app = express();
 const persistentMessageChannelID = process.env.CHANNEL_ID || 'Channel_ID_HERE';
 const TOKEN = process.env.TOKEN || 'DISCORD_BOT_TOKEN_HERE';
