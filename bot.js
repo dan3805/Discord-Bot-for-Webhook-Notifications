@@ -79,7 +79,7 @@ app.post('/embed', (req, res) => {
           }
         } else {
           res.status(404).send('Embed not found');
-        }
+        };
       }).catch(err => {
         console.error('Error retrieving messages:', err);
         res.status(500).send('Error retrieving messages');
