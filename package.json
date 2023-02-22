@@ -4,12 +4,12 @@
   "description": "A Discord bot",
   "main": "bot.js",
   "dependencies": {
-    "discord.js": "latest",
-    "express": "latest",
-    "body-parser": "latest"
+    "discord.js": "",
+    "express": "",
+    "body-parser": ""
   },
   "engines": {
-  "node": "latest",
-  "npm": "latest"
+  "node": "",
+  "npm": ""
  }
 }
