@@ -45,9 +45,10 @@ app.post('/notification-endpoint', (req, res) => {
   const notification = req.body;
   console.log(`New notification received: ${JSON.stringify(notification)}`);
 
-  const embed = { ...persistentMessage.embeds[0] };
+ const embed = persistentMessage.embeds.length > 0 ? { ...persistentMessage.embeds[0] } : {};
 
-  // If the "update_embed" field is present, we update the embed message with the new values
+if (embed.footer && embed.footer.text === 'Persistent message') {
+  // Update the embed message with the new values
   if (notification.update_embed) {
     for (const [key, value] of Object.entries(notification.update_embed)) {
       if (key in embed) {
@@ -82,13 +83,16 @@ app.post('/notification-endpoint', (req, res) => {
       embed.fields.splice(index, 1);
     }
   }
-if (!embed || !embed.title) {
-  console.log('Invalid embed structure');
-  return res.status(400).end();
-}
+
+  if (!embed || !embed.title) {
+    console.log('Invalid embed structure');
+    return res.status(400).end();
+  }
+
   persistentMessage.edit({
     embeds: [embed]
   });
+
 
   res.status(200).end();
 });
