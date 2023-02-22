@@ -9,7 +9,7 @@
     "body-parser": "^1.19.0"
   },
   "engines": {
-    "node": "latest",
-    "npm": "latest"
-  }
+  "node": ">=16.0.0",
+  "npm": ">=7.0.0"
+ }
 }
