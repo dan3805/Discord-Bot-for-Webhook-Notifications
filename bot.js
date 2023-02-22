@@ -67,7 +67,7 @@ app.post('/notification-endpoint/:secret', (req, res) => {
       if (key in embed) {
         embed[key] = value;
       } else if (key === 'fields') {
-        // Update a field based on its contents
+
         value.forEach(newField => {
           const oldField = embed.fields.find(field => field.name.includes(newField.name));
           if (oldField) {
